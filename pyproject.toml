@@ -24,6 +24,8 @@ dependencies = [
     "qdrant-client>=1.20.0",
     "pypdf>=6.21.2",
     "fonttools>=4.65.0",
+    "uvicorn>=0.54.0",
+    "logfire[fastapi,httpx,requests]>=5.4.0",
 ]
 
 [project.scripts]
@@ -35,5 +37,5 @@ build-backend = "uv_build"
 
 [tool.uv.workspace]
 members = [
-    "awesome-project",
+    "awesome-project"
 ]

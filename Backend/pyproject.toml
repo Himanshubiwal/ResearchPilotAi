@@ -1,7 +1,0 @@
-[project]
-name = "awesome-project"
-version = "0.1.0"
-requires-python = ">=3.10"
-dependencies = [
- "fastapi[standard]>=0.143.5",
-]
