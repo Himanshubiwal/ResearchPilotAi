@@ -30,4 +30,3 @@ class ResearchState(TypedDict, total=False):
     # 7. Execution control
     retry_count: int
     errors: list[str]
-    temporary_results: str

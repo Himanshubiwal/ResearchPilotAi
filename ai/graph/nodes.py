@@ -3,7 +3,7 @@ from ai.graph.config import llm_groq
 from langchain_core.messages import HumanMessage
 from ai.retrieval.retriever import retrieve_chunks
 from ai.graph.states import ResearchState
-
+from ai.graph.system_messages import system_messages_planner
 
 def add_human_message(state: ResearchState):
     question = state.get("question", "")
@@ -37,3 +37,5 @@ def get_response(state: ResearchState):
         content_preview = str(response.content)[:120] if hasattr(response, "content") else ""
         logfire.info("LLM response generated", response_preview=content_preview)
         return {"messages": [response]}
+
+
