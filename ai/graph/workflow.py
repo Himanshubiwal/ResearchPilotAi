@@ -49,6 +49,7 @@ def ask_ai(question: str) -> str:
                 total_messages=len(output.get("messages", [])),
             )
             return response_content
+
         except Exception as e:
             logfire.exception("Error executing ResearchPilot graph: {error}", error=str(e), question=question)
             raise

@@ -1,6 +1,8 @@
 import uvicorn
-import ai.observability  # noqa: F401
+from ai.observability import setup_logfire
 import logfire
+
+setup_logfire()
 
 
 def start():

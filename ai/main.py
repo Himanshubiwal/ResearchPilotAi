@@ -1,8 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import logfire
-from ai.observability import instrument_fastapi_app
+from ai.observability import setup_logfire, instrument_fastapi_app
 from ai.graph.workflow import ask_ai
+
+
+
+setup_logfire()
 
 app = FastAPI(
     title="ResearchPilot AI API",

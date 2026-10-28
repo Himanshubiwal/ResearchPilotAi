@@ -69,6 +69,5 @@ def instrument_fastapi_app(app) -> None:
 
 
 # Initialize on module import
-setup_logfire()
 
 __all__ = ["logfire", "setup_logfire", "instrument_fastapi_app"]

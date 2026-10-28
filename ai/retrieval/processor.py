@@ -7,12 +7,17 @@ from dotenv import load_dotenv
 import logfire
 from qdrant_client import QdrantClient, models
 
-import ai.observability  # noqa: F401
+from ai.observability import setup_logfire
 from ai.retrieval.chunking import text_splitter
 from ai.retrieval.embeddings import get_embeddings
 from ai.retrieval.loaders.pdf_load import parse_pdf
 
 load_dotenv()
+setup_logfire()
+
+user_id = os.getenv("USER_ID")
+chat_id = os.getenv("CHAT_ID")
+
 
 qdrant_client = QdrantClient(
     url=os.getenv("QDRANT_URL"),
@@ -21,7 +26,7 @@ qdrant_client = QdrantClient(
     check_compatibility=False,
 )
 
-COLLECTION_NAME = "VECTOR_2"
+COLLECTION_NAME = "VECTOR_3"
 VECTOR_SIZE = 3072  # gemini-embedding-001 outputs 3072 dimensions
 BATCH_SIZE = 90  # Stay under Gemini free tier limit (100 req/min)
 
@@ -95,6 +100,8 @@ def store_vectors(chunks: list[str], filename: str, source_type: str):
                         id=str(uuid.uuid4()),
                         vector=vector,
                         payload={
+                            "user_id": user_id,
+                            "chat_id": chat_id,
                             "text": chunk,
                             "source": filename,
                             "source_type": source_type,
