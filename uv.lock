@@ -1395,6 +1395,20 @@ wheels = [
 ]
 
 [[package]]
+name = "langchain"
+version = "1.4.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "langchain-core" },
+    { name = "langgraph" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d1/6b/7147b4cfa86091e05e3c0189952d976e13ef27249c8cd9e46d8c742a5b5c/langchain-1.4.7.tar.gz", hash = "sha256:818275348cd707f7fbbe92ece0a725c25823140a054cf29865f420e0200fa2af", size = 762840, upload-time = "2026-10-21T21:39:01.141Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/2e/86a102e61fc88ede073aebdb795fef0eb058a887bed4aa862e8ca2697565/langchain-1.4.7-py3-none-any.whl", hash = "sha256:bc40d4a9a46f0c3d75e316c0e576931fe19bceef83912a71dc1e0df781eb8f82", size = 170549, upload-time = "2026-10-21T21:38:59.466Z" },
+]
+
+[[package]]
 name = "langchain-classic"
 version = "1.0.8"
 source = { registry = "https://pypi.org/simple" }
@@ -1513,6 +1527,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/77/66/fb1c4e2801e55d92dea71d9a7f948574a322a1f5adc7913231023827f79f/langchain_qdrant-1.1.0.tar.gz", hash = "sha256:433236845736f973543ac6b7137f9d7fa511b7539373fbc6565c581d3ba59373", size = 195565, upload-time = "2025-10-22T17:27:15.157Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/7e/d951082cb13e923508ba1eee4f48e7d511efc991c6506af567334654a3f3/langchain_qdrant-1.1.0-py3-none-any.whl", hash = "sha256:546c5c9aa57f543dbcee07343f730c331e4ec2af2ec55b541010af08d872bf35", size = 24254, upload-time = "2025-10-22T17:27:14.065Z" },
+]
+
+[[package]]
+name = "langchain-tavily"
+version = "0.2.18"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "aiohttp" },
+    { name = "langchain" },
+    { name = "langchain-core" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d6/6c/b309ef3062b189a82463dc93553804566e71aa393f9ba8954750793c1a6f/langchain_tavily-0.2.18.tar.gz", hash = "sha256:cd7859ae1a6ce79236580ef67072ff5fc43c7ded94e7eac38ff04209ca85a320", size = 25378, upload-time = "2026-04-16T15:23:24.526Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/71/9c/0c043e4434b1823f0ac194f66036cbb0569275a99dcb890e0891ecd34fb2/langchain_tavily-0.2.18-py3-none-any.whl", hash = "sha256:dccf3ad1c50e2cb2a89bec11727555805c9df8abd42c1f3ad42ccad86e28aa44", size = 30814, upload-time = "2026-04-16T15:23:23.424Z" },
 ]
 
 [[package]]
@@ -3381,6 +3410,7 @@ dependencies = [
     { name = "langchain-google-genai" },
     { name = "langchain-groq" },
     { name = "langchain-qdrant" },
+    { name = "langchain-tavily" },
     { name = "langchain-text-splitters" },
     { name = "langgraph" },
     { name = "logfire", extra = ["fastapi", "httpx", "requests"] },
@@ -3404,6 +3434,7 @@ requires-dist = [
     { name = "langchain-google-genai", specifier = ">=4.4.2" },
     { name = "langchain-groq", specifier = ">=1.1.3" },
     { name = "langchain-qdrant", specifier = ">=1.1.0" },
+    { name = "langchain-tavily", specifier = ">=0.2.18" },
     { name = "langchain-text-splitters", specifier = ">=1.1.3" },
     { name = "langgraph", specifier = ">=1.2.16" },
     { name = "logfire", extras = ["fastapi", "httpx", "requests"], specifier = ">=5.4.0" },

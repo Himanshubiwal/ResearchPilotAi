@@ -4,6 +4,10 @@ import logfire
 import ai.observability  # noqa: F401
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
+from ai.graph.tools.doc_retrieval import doc_retrieval
+from ai.graph.tools.web_search import web_search
+
+
 
 load_dotenv()
 
@@ -16,6 +20,8 @@ llm = ChatGoogleGenerativeAI(
     temperature=0.1,
     max_tokens=2500,
 )
+tools = [web_search,doc_retrieval]
+
 
 llm_groq = ChatGroq(
     api_key=Groq_api_key,
@@ -24,6 +30,7 @@ llm_groq = ChatGroq(
     max_tokens=2000,
 )
 
+llm_groq_with_tools = llm_groq.bind_tools(tools)
 logfire.info(
     "LLM clients initialized",
     gemini_model="gemini-3-pro",

@@ -13,7 +13,7 @@ import logfire
 
 def research_planner(state: ResearchState):
     """ it will create a research plan for the query"""
-
+    print("planner runns")
     plan_list = llm_groq.invoke([
         system_messages_planner,
         HumanMessage(content=state["question"])
@@ -34,6 +34,7 @@ def research_planner(state: ResearchState):
 
     return {
         "research_plan": steps,
+        "messages":[plan_list]
     }
 
 

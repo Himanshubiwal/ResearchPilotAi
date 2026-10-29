@@ -26,6 +26,7 @@ dependencies = [
     "fonttools>=4.65.0",
     "uvicorn>=0.54.0",
     "logfire[fastapi,httpx,requests]>=5.4.0",
+    "langchain-tavily>=0.2.18",
 ]
 
 [project.scripts]

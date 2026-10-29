@@ -1,30 +1,42 @@
 import ai.observability  # noqa: F401 - ensures LangGraph OTEL env vars and Logfire are ready
 import logfire
-from ai.graph.states import ResearchState
-from ai.graph.nodes import add_human_message, get_response
 from langgraph.graph import START, END, StateGraph
-from langchain_core.messages import SystemMessage
+from langgraph.types import Send
+from ai.graph.states import ResearchState,TaskState
+from ai.graph.nodes.research_planner import research_planner
+from ai.graph.nodes.research_executer import research_executer
+from ai.graph.subgraphs.research_worker import research_worker_graph
+from rich import print
 
 
+def dispatch_task(state: ResearchState):
+    return [
+        Send("research_worker", {"task": task})
+        for task in state["research_plan"]
+    ]
 
 
+def run_research_worker(state: TaskState):
+    result = research_worker_graph.invoke({
+        "task": state["task"],
+    })
 
-
-
+    return {
+        "search_results": result.get("search_results", []),
+    }
 
 # Build the research workflow graph
 builder = StateGraph(ResearchState)
 
-builder.add_node("add_human_message", add_human_message)
-builder.add_node("get_response", get_response)
+builder.add_node("research_planner", research_planner)
+builder.add_node("research_worker", run_research_worker)
 
-builder.add_edge(START, "add_human_message")
-builder.add_edge("add_human_message", "get_response")
-builder.add_edge("get_response", END)
+builder.add_edge(START, "research_planner")
+builder.add_conditional_edges("research_planner", dispatch_task)
+builder.add_edge("research_worker", END)
 graph = builder.compile()
 
 logfire.info("ResearchPilot StateGraph workflow compiled successfully")
-
 
 
 def ask_ai(question: str) -> str:
@@ -36,16 +48,20 @@ def ask_ai(question: str) -> str:
                 "question": question,
                 "messages": [],
             })
-            final_message = output["messages"][-1]
-            response_content = getattr(final_message, "content", str(final_message))
+            result = output.get("search_results", [])
             logfire.info(
                 "Graph execution completed successfully",
                 question=question,
-                response_length=len(str(response_content)),
-                total_messages=len(output.get("messages", [])),
+                report_length=len(result),
+                tasks_executed=len(output.get("search_results", [])),
             )
-            return response_content
+            return result
 
         except Exception as e:
             logfire.exception("Error executing ResearchPilot graph: {error}", error=str(e), question=question)
             raise
+
+
+if __name__ == "__main__":
+    result = ask_ai("future of data engineering")
+    print(result)
