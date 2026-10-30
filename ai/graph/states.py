@@ -13,7 +13,7 @@ class ResearchState(TypedDict, total=False):
     # 2. Research planning
     research_plan: list[str]
     current_step: int
-    search_results: Annotated[List[str],add]
+    search_results: Annotated[List[dict],add]
 
     # 4. Evidence and analysis
     gathered_evidence: list[dict]

@@ -27,6 +27,8 @@ dependencies = [
     "uvicorn>=0.54.0",
     "logfire[fastapi,httpx,requests]>=5.4.0",
     "langchain-tavily>=0.2.18",
+    "langchain-openrouter>=0.2.9",
+    "langchain-openai>=1.7.3",
 ]
 
 [project.scripts]

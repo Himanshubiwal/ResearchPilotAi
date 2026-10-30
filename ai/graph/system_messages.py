@@ -48,7 +48,9 @@ system_messages_planner = SystemMessage(
 - Do not invent facts or assume research findings before evidence is collected.
 
 ## Output Requirements
-Return an python list of actionable research steps, the number of steps should not exceed 2.
+Return an python list tasks in this formate
+[ "task_1","task_2","task_3"]
+nothing else should be there and i only want 2 tasks not more or less
 Return only the research plan list without introductory text, conclusions, or additional commentary.
     """
 )
