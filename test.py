@@ -1,50 +1,48 @@
-
-from urllib import response
-import os
-from typing import Literal
-from rich import print
+from pydantic_core.core_schema import lax_or_strict_schema
+from langchain_litellm import ChatLiteLLMRouter
+from litellm import Router
+import os 
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
-from langchain_groq import ChatGroq
-from langchain_core.messages import SystemMessage, HumanMessage
-from ai.graph.config import structured_output_llm_gemini,llm_openrouter
-
+from langchain.messages import HumanMessage
 load_dotenv()
+from rich import print
+
+
+Google_api_key = os.getenv("GEMINI_API_KEY")
+Groq_api_key = os.getenv("GROQ_API_KEY")
+Openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+model_list = [
+    {
+        "model_name": "researchpilot",
+        "litellm_params": {
+            "model": "gemini/gemini-3.df5-flash-lite",
+            "api_key": Google_api_key,
+        },
+    },
+    {
+        "model_name": "researchpilot-fallback",
+        "litellm_params": {
+            "model": "groq/openai/gpt-oss-120b",
+            "api_key": Groq_api_key,
+        },
+    },
+]
+litellm_router = Router(model_list=model_list,
+    fallbacks=[
+        {"researchpilot": ["researchpilot-fallback"]}
+    ],)
+llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot", temperature=0.1)
 
 
 
-# 6. Invoke the model
-def main():
 
 
-    response=llm_openrouter.invoke([HumanMessage(content="who are you ?")])
-    
-    print (response)
-    # # 7. Print structured Pydantic output
-    # print("\n========== PYDANTIC OUTPUT ==========\n")
-    # print(result)
-    # # 8. Access individual fields
-    # print("\n========== ANSWER ==========\n")
-    # print(result.content)
-    # print(type(result.content))
 
-    # print("\n========== EVIDENCE ==========\n")
-
-    # for index, evidence in enumerate(result.evidence, start=1):
-    #     print(f"\nEvidence {index}")
-    #     print("Content:", evidence.content)
-    #     print("Source:", evidence.source)
-    #     print("Source Type:", evidence.source_type)
-    #     print("Title:", evidence.title)
-    #     print("Metadata:", evidence.metadata)
-
-    # # 9. Convert Pydantic object into a Python dictionary
-    # result_dict = result.model_dump()
-
-    # print("\n========== PYTHON DICTIONARY ==========\n")
-    # print(result_dict)
-    # print(type(result_dict))
+response = llm.invoke([HumanMessage(
+    content="tell me about rag in 5 lines"
+)])
 
 
-if __name__ == "__main__":
-    main()
+print(response)
+
+

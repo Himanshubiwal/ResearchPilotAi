@@ -20,7 +20,6 @@ def run_research_worker(state: TaskState):
     result = research_worker_graph.invoke({
         "task": state["task"],
     })
-
     return {
         "search_results": result.get("search_results", []),
     }

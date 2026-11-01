@@ -29,6 +29,10 @@ dependencies = [
     "langchain-tavily>=0.2.18",
     "langchain-openrouter>=0.2.9",
     "langchain-openai>=1.7.3",
+    "litellm>=1.106.6",
+    "langchain>=1.4.7",
+    "langchain-litellm>=0.8.1",
+    "mcp>=2.3.0",
 ]
 
 [project.scripts]

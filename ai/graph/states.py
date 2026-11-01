@@ -31,12 +31,11 @@ class ResearchState(TypedDict, total=False):
     errors: list[str]
 
 
-class TaskState(TypedDict, total=False):
-    task: str
-
-
 
 class TaskState(TypedDict, total=False):
     task: str
-    messages: Annotated[list[AnyMessage], add_messages]
-    search_results: Annotated[list[str], add]
+    messages: Annotated[List[AnyMessage], add_messages]
+    search_results: Annotated[List[str], add]
+
+
+
