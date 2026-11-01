@@ -18,7 +18,7 @@ class ResearchState(TypedDict, total=False):
     search_results: Annotated[List[str],add]
 
     # 4. Evidence and analysis
-    gathered_evidence: list[dict]
+    gathered_evidence:Annotated[list[dict],add]
 
     # 5. Verification
     verification_results:Annotated [list[dict],add]

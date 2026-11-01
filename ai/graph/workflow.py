@@ -99,7 +99,7 @@ def ask_ai(question: str) -> str:
                 "messages": [],
             })
             
-            result = output.get("search_results", [])
+            result = output.get("report", "")
             logfire.info(
                 "Graph execution completed successfully",
                 question=question,

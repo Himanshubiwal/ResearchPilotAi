@@ -2,7 +2,7 @@ import logfire
 from ai.graph.states import ResearchState
 from ai.graph.config import structured_llm_verify
 from ai.graph.system_messages import system_messages_verification
-from langchain.messages import HumanMessage
+from langchain_core.messages import HumanMessage
 
 def results_verify(state:ResearchState):
     try:
