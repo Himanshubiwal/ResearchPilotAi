@@ -33,6 +33,9 @@ dependencies = [
     "langchain>=1.4.7",
     "langchain-litellm>=0.8.1",
     "mcp>=2.3.0",
+    "soundfile>=0.14.0",
+    "backoff>=2.2.1",
+    "redis>=8.1.0",
 ]
 
 [project.scripts]

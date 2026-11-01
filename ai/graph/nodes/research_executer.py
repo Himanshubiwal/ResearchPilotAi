@@ -13,11 +13,35 @@ def research_executer(state: TaskState):
             messages = state.get("messages", [])
             flag = False
             # Initialize this worker's conversation only once
+
+
+            human_message = HumanMessage(
+                content=f"""
+                Research Task:
+                {state["task"]}
+                Previous Research Result:
+                {state["search_results"]}
+                Previous Evidence:
+                {state["evidence"]}
+                Verification Feedback:
+                {state["feedback"]}
+                Improve the research using the verification feedback.
+                Address unsupported claims, missing evidence, and identified issues.
+                Gather additional evidence if necessary.
+                Return an updated result, gathered evidence, and findings.
+                """
+            )
             if not messages:
                 messages = [
                     system_messages_task_executer,
-                    HumanMessage(content=state["task"]),
+                    
                 ]
+                if state['feedback']:
+                    messages.append(human_message)
+                else:
+                    messages.append(HumanMessage(
+                        content=f"Research Task:\n{state['task']}"
+                    ))
                 flag=True
             with logfire.span("llm tool call"):
 

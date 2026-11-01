@@ -1,3 +1,5 @@
+from litellm.proxy.lens.endpoints import evidence_content
+from litellm.proxy.lens import feedback_endpoints
 from ast import operator
 from filetype.types import document
 from typing import TypedDict, Annotated, List, Optional
@@ -13,14 +15,14 @@ class ResearchState(TypedDict, total=False):
     # 2. Research planning
     research_plan: list[str]
     current_step: int
-    search_results: Annotated[List[dict],add]
+    search_results: Annotated[List[str],add]
 
     # 4. Evidence and analysis
     gathered_evidence: list[dict]
-    findings: list[str]
 
     # 5. Verification
-    verification_results: list[dict]
+    verification_results:Annotated [list[dict],add]
+    feedback:Annotated[list[dict],add]
 
     # 6. Final output
     report: str
@@ -35,7 +37,8 @@ class ResearchState(TypedDict, total=False):
 class TaskState(TypedDict, total=False):
     task: str
     messages: Annotated[List[AnyMessage], add_messages]
-    search_results: Annotated[List[str], add]
-
+    search_results: Annotated[List[dict], add]
+    feedback:dict
+    evidence:list[dict]
 
 

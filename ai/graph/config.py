@@ -6,7 +6,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from ai.graph.tools.doc_retrieval import doc_retrieval
 from ai.graph.tools.web_search import web_search
-from ai.graph.models.structured_output import TaskResults
+from ai.graph.models.structured_output import TaskResults,VerificationResult
 from langchain_openrouter import ChatOpenRouter
 from langchain_openai import ChatOpenAI
 from langchain_litellm import ChatLiteLLMRouter
@@ -102,3 +102,5 @@ llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot", tempe
 
 structured_llm = llm.with_structured_output(TaskResults)
 llm_with_tool = llm.bind_tools(tools)
+
+structured_llm_verify = llm.with_structured_output(VerificationResult)

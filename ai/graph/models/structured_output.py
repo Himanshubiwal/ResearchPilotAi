@@ -1,5 +1,5 @@
 from pydantic import BaseModel,Field
-from typing import List
+from typing import List,Literal
 
 
 
@@ -13,5 +13,15 @@ class Evidence(BaseModel):
 class TaskResults(BaseModel):
     content :str = Field(description="these is task result content ")
     evidence :List[Evidence] = Field(description="these are the evidence of task results")
+
+
+class VerificationResult(BaseModel):
+    status: Literal["passed", "failed"]
+    verified_claims: list[str]
+    unsupported_claims: list[str]
+    issues: list[str]
+    suggestions: list[str]
+
+
 
 
