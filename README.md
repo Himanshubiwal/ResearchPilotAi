@@ -7,3 +7,11 @@ system msgs so reduce the call and finally succeed  this is fun
 
 and don't kn0w why this ai is not working properly like showing bullshitt suggestions after updating the antigravitty ide
 thats it for today ,byeeee
+
+
+
+
+
+
+
+this was a bad day
