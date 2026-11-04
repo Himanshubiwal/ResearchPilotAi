@@ -50,7 +50,7 @@ system_messages_planner = SystemMessage(
 ## Output Requirements
 Return an python list tasks in this formate
 [ "task_1","task_2","task_3"]
-nothing else should be there .
+nothing else should be there atmost 5 tasks u can give .
 Return only the research plan list without introductory text, conclusions, or additional commentary.
     """
 )

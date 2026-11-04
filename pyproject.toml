@@ -36,6 +36,10 @@ dependencies = [
     "soundfile>=0.14.0",
     "backoff>=2.2.1",
     "redis>=8.1.0",
+    "docx2txt>=0.9",
+    "unstructured[pptx]>=0.18.32",
+    "jq>=1.13.0",
+    "beautifulsoup4>=4.15.0",
 ]
 
 [project.scripts]

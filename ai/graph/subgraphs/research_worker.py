@@ -1,5 +1,4 @@
-from sqlalchemy import exc
-from langgraph.graph import StateGraph, END,START
+from langgraph.graph import StateGraph, END, START
 from langgraph.prebuilt import ToolNode, tools_condition
 import logfire
 from ai.graph.states import TaskState
@@ -11,7 +10,7 @@ worker_builder = StateGraph(TaskState)
 
 
 try:
-    with logfire.span("building research_worker_graph "):
+    with logfire.span("building research_worker_graph"):
         worker_builder.add_node(
             "research_executer",
             research_executer,
@@ -21,7 +20,7 @@ try:
             "tool_node",
             ToolNode(tools),
         )
-        worker_builder.add_edge(START,"research_executer")
+        worker_builder.add_edge(START, "research_executer")
         worker_builder.add_conditional_edges(
             "research_executer",
             tools_condition,
