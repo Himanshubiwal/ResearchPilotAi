@@ -129,5 +129,5 @@ def ask_ai(question: str) -> str:
 
 
 if __name__ == "__main__":
-    result = ask_ai("Based on our uploaded psycholinguistics notes, explain the pre-lexical analysis and contact/activation stages in spoken word recognition.")
+    result = ask_ai("psycholinguistics of speaking")
     print(result)

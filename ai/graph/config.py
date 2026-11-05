@@ -15,11 +15,14 @@ from litellm import Router
 load_dotenv()
 
 
-Google_api_key = os.getenv("GEMINI_API_KEY")
+Google_api_key_1 = os.getenv("GEMINI_API_KEY_1")
+Google_api_key_2 = os.getenv("GEMINI_API_KEY_2")
 Groq_api_key = os.getenv("GROQ_API_KEY")
 Openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 
-if not Google_api_key:
+if not Google_api_key_1:
+    raise ValueError("google api key is not configured")
+if not Google_api_key_2:
     raise ValueError("google api key is not configured")
 
 if not Groq_api_key:
@@ -72,12 +75,20 @@ tools = [web_search,doc_retrieval]
 
 model_list = [
     {
+        "model_name": "researchpilot_2",
+        "litellm_params": {
+            "model": "gemini/gemini-3.5-flash-lite",
+            "api_key": Google_api_key_2,
+        },
+    },
+    {
         "model_name": "researchpilot",
         "litellm_params": {
             "model": "gemini/gemini-3.5-flash-lite",
-            "api_key": Google_api_key,
+            "api_key": Google_api_key_1,
         },
     },
+
     {
         "model_name": "researchpilot-fallback",
         "litellm_params": {
@@ -90,10 +101,10 @@ model_list = [
 
 litellm_router = Router(model_list=model_list,
     fallbacks=[
-        {"researchpilot": ["researchpilot-fallback"]}
+        {"researchpilot_2": ["researchpilot","researchpilot-fallback"]}
     ],)
 
-llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot", temperature=0.1)
+llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot_2", temperature=0.1)
 
 
 

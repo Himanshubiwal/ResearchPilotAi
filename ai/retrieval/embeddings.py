@@ -19,7 +19,7 @@ load_dotenv()
 EMBEDDING_MODEL = "gemini-embedding-001"
 
 model_embedding = GoogleGenerativeAIEmbeddings(
-    google_api_key=os.getenv("GEMINI_API_KEY"),
+    google_api_key=os.getenv("GEMINI_API_KEY_1"),
     model=EMBEDDING_MODEL,
 )
 
