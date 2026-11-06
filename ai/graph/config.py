@@ -11,6 +11,9 @@ from langchain_openrouter import ChatOpenRouter
 from langchain_openai import ChatOpenAI
 from langchain_litellm import ChatLiteLLMRouter
 from litellm import Router
+from langchain_core.rate_limiters import InMemoryRateLimiter
+
+
 
 load_dotenv()
 
@@ -35,7 +38,11 @@ if not Openrouter_api_key:
 
 tools = [web_search,doc_retrieval]
 
-
+rate_limiter = InMemoryRateLimiter(
+    requests_per_second=0.3,
+    check_every_n_seconds=0.1,
+    max_bucket_size=1,
+)
 
 
 model_list = [
@@ -47,10 +54,11 @@ model_list = [
             },
         },
     {
-        "model_name": "researchpilot_2",
+        "model_name": "researchpilot",
         "litellm_params": {
             "model": "gemini/gemini-3.5-flash-lite",
             "api_key": Google_api_key_2,
+            "rpm":12
         },
     },
     {
@@ -58,6 +66,7 @@ model_list = [
         "litellm_params": {
             "model": "gemini/gemini-3.5-flash-lite",
             "api_key": Google_api_key_1,
+            "rpm":12
         },
     },
 
@@ -66,19 +75,22 @@ model_list = [
         "litellm_params": {
             "model": "groq/openai/gpt-oss-120b",
             "api_key": Groq_api_key,
+            "rpm":12
         },
     },
 ]
 
 
-litellm_router = Router(model_list=model_list,
-    fallbacks=[
-        {"researchpilot_2": ["researchpilot","researchpilot-fallback","local"]}
-    ],)
+litellm_router = Router(
+    model_list=model_list,
+    routing_strategy="usage-based-routing-v2",
+    fallbacks=[{"researchpilot": ["researchpilot-fallback"]}],
+    num_retries=2,
+    cooldown_time=10,
+)
 
-
-llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot_2", temperature=0.1)
-llm_local = ChatLiteLLMRouter(router=litellm_router,model_name="local",temperature=0.1)
+llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot", rate_limiter=rate_limiter)
+llm_local = ChatLiteLLMRouter(router=litellm_router,model_name="local")
 
 
 structured_llm = llm.with_structured_output(TaskResults)

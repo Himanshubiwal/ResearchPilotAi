@@ -1,12 +1,12 @@
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.runnables import RunnableConfig
 import logfire
 from ai.graph.states import TaskState
 from ai.graph.system_messages import system_messages_task_executer
 from ai.graph.config import llm_with_tool, structured_llm
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 
 
-def research_executer(state: TaskState):
+def research_executer(state: TaskState, config: RunnableConfig = None):
     try:
         with logfire.span("research_executor"):
             messages = state.get("messages", [])
@@ -39,7 +39,7 @@ def research_executer(state: TaskState):
                     ))
 
             with logfire.span("llm tool call"):
-                response = llm_with_tool.invoke(messages)
+                response = llm_with_tool.invoke(messages, config=config)
 
             # Build state updates
             if is_first_call:

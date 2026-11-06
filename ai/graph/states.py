@@ -27,6 +27,8 @@ class ResearchState(TypedDict, total=False):
     # 7. Execution control
     retry_count: int
     errors: list[str]
+    task_counts: Annotated[int, add]
+    tool_counts: Annotated[int, add]
 
 
 
@@ -36,5 +38,6 @@ class TaskState(TypedDict, total=False):
     search_results: Annotated[List[dict], add]
     feedback:dict
     evidence:list[dict]
+    
 
 

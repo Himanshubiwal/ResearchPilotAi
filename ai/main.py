@@ -66,6 +66,8 @@ def query(query: QueryModel):
         logfire.info("Received query request", question=question)
         try:
             result = ask_ai(question)
+            if isinstance(result, tuple):
+                result, _ = result
             logfire.info("Query answered successfully", question=question, answer_preview=str(result)[:100])
             return {"answer": result}
         except Exception as e:
@@ -123,9 +125,15 @@ async def chat_endpoint(
     try:
         with logfire.span("chat_endpoint: ask_ai", query=user_query, processed_files=processed_files):
             logfire.info("Executing AI workflow with prompt", prompt=user_query, files=processed_files)
-            answer = ask_ai(user_query)
+            res = ask_ai(user_query)
+            if isinstance(res, tuple):
+                answer, tool_count = res
+            else:
+                answer, tool_count = res, 0
+
             return {
                 "response": answer,
+                "tool_count": tool_count,
                 "files_processed": processed_files,
                 "files_failed": failed_files,
                 "status": "success",

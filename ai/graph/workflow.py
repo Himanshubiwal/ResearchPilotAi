@@ -5,10 +5,13 @@ from langgraph.types import Send
 from ai.graph.states import ResearchState, TaskState
 from ai.graph.nodes.research_planner import research_planner
 from ai.graph.nodes.research_executer import research_executer
-from ai.graph.subgraphs.research_worker import research_worker_graph
+from ai.graph.subgraphs.research_worker import research_worker_graph,ToolCounter
 from rich import print
 from ai.graph.nodes.results_verify import results_verify
 from ai.graph.nodes.research_report import research_report
+from langchain_core.callbacks import BaseCallbackHandler
+
+
 
 
 MAX_RETRIES = 3
@@ -37,13 +40,14 @@ def dispatch_task(state: ResearchState):
 
 
 def run_research_worker(state: TaskState):
+    counter = ToolCounter()
     result = research_worker_graph.invoke({
         "task": state["task"],
         "search_results": state.get('search_results', []),
         "evidence": state.get('evidence', []),
         "feedback": state.get("feedback", {})
-    })
-
+    }, config={"callbacks": [counter]})
+    
     with logfire.span("separating results and evidence"):
         search_results = []
         gathered_evidence = []
@@ -55,9 +59,18 @@ def run_research_worker(state: TaskState):
             elif isinstance(r, str):
                 search_results.append(r)
 
+    tool_count = counter.count
+    # Fallback safety in case a tool bypassed the callback handler
+    if tool_count == 0 and result.get("messages"):
+        from langchain_core.messages import ToolMessage
+        tool_count = sum(1 for m in result["messages"] if isinstance(m, ToolMessage) or getattr(m, "type", None) == "tool")
+
+    logfire.info("Worker tool count recorded", task=state.get("task", ""), tool_count=tool_count)
+
     return {
         "search_results": search_results,
         "gathered_evidence": gathered_evidence,
+        "tool_counts": tool_count,
     }
 
 
@@ -78,6 +91,8 @@ def decide_path(state: ResearchState):
         return "research_report"
     else:
         return "research_planner"
+
+
 
 
 # Build the research workflow graph
@@ -115,13 +130,14 @@ def ask_ai(question: str) -> str:
             })
             
             result = output.get("report", "")
+            tool_count = output.get("tool_counts",0)
             logfire.info(
                 "Graph execution completed successfully",
                 question=question,
                 report_length=len(result),
                 tasks_executed=len(output.get("search_results", [])),
             )
-            return result
+            return result,tool_count
 
         except Exception as e:
             logfire.exception("Error executing ResearchPilot graph: {error}", error=str(e), question=question)
@@ -129,5 +145,7 @@ def ask_ai(question: str) -> str:
 
 
 if __name__ == "__main__":
-    result = ask_ai("psycholinguistics of speaking")
+    result,tool_count = ask_ai("psycholinguistics of speaking")
     print(result)
+    print ("+++++++++++++++++++++++++++")
+    print(tool_count)

@@ -4,9 +4,21 @@ import logfire
 from ai.graph.states import TaskState
 from ai.graph.config import tools
 from ai.graph.nodes.research_executer import research_executer
-
+from langchain_core.callbacks import BaseCallbackHandler
 
 worker_builder = StateGraph(TaskState)
+class ToolCounter(BaseCallbackHandler):
+    def __init__(self):
+        super().__init__()
+        self.count = 0
+        self.by_tool = {}
+
+    def on_tool_start(self, serialized, input_str, **kwargs):
+        name = (serialized or {}).get("name") or kwargs.get("name") or "unknown"
+        self.count += 1
+        self.by_tool[name] = self.by_tool.get(name, 0) + 1
+        logfire.info("ToolCounter: tool started", tool_name=name, count=self.count)
+
 
 
 try:

@@ -36,6 +36,7 @@ def research_planner(state: ResearchState):
 
             return {
                 "research_plan": steps,
+                "task_count":len(steps),
                 "messages": [plan_list]
             }
     except Exception:
