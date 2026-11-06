@@ -40,6 +40,8 @@ dependencies = [
     "unstructured[pptx]>=0.18.32",
     "jq>=1.13.0",
     "beautifulsoup4>=4.15.0",
+    "ollama>=0.6.3",
+    "langchain-ollama>=1.1.0",
 ]
 
 [project.scripts]

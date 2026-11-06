@@ -32,48 +32,20 @@ if not Openrouter_api_key:
     raise ValueError("Openrouter api key is not configured")
 
 
-# llm_gemini = ChatGoogleGenerativeAI(
-#     api_key=Google_api_key,
-#     model="gemini-3.5-flash-lite",
-#     temperature=0.1,
-#     max_tokens=2500,
-# )
+
 tools = [web_search,doc_retrieval]
 
 
-# llm_groq = ChatGroq(
-#     api_key=Groq_api_key,
-#     model="openai/gpt-oss-120b",
-#     temperature=0.1,
-#     max_tokens=2000,
-# )
 
-
-# llm_openrouter=ChatOpenRouter(
-#     api_key=Openrouter_api_key,
-#     model="nvidia/nemotron-3-ultra-550b-a55b:free",
-#     temperature=0,
-#     max_retries=2,
-# )
-
-# llm_groq_with_tools = llm_groq.bind_tools(tools
-# ,parallel_tool_calls=False)
-# logfire.info(
-#     "LLM clients initialized",
-#     gemini_model="gemini-3-pro",
-#     groq_model="openai/gpt-oss-120b",
-#     gemini_key_set=bool(Google_api_key),
-#     groq_key_set=bool(Groq_api_key),
-# )
-# llm_gemini_with_tools =llm_gemini.bind_tools(tools)
-
-# structured_output_llm_gemini = llm_gemini.with_structured_output(TaskResults)
-# structured_output_llm_groq = llm_groq.with_structured_output(TaskResults,
-#     method="json_schema",
-#     strict=True
-# )
 
 model_list = [
+    {
+            "model_name": "local",
+            "litellm_params": {
+                "model": "ollama_chat/hf.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB:Q4_K_M",
+                "api_base": "http://localhost:11434",
+            },
+        },
     {
         "model_name": "researchpilot_2",
         "litellm_params": {
@@ -101,11 +73,12 @@ model_list = [
 
 litellm_router = Router(model_list=model_list,
     fallbacks=[
-        {"researchpilot_2": ["researchpilot","researchpilot-fallback"]}
+        {"researchpilot_2": ["researchpilot","researchpilot-fallback","local"]}
     ],)
 
-llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot_2", temperature=0.1)
 
+llm = ChatLiteLLMRouter(router=litellm_router, model_name="researchpilot_2", temperature=0.1)
+llm_local = ChatLiteLLMRouter(router=litellm_router,model_name="local",temperature=0.1)
 
 
 structured_llm = llm.with_structured_output(TaskResults)
